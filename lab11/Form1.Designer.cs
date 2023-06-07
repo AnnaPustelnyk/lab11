@@ -36,6 +36,9 @@
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
+            label5 = new Label();
+            listBox1 = new ListBox();
+            listBox2 = new ListBox();
             SuspendLayout();
             // 
             // radioButton1
@@ -80,6 +83,7 @@
             button2.Text = "stop";
             button2.UseVisualStyleBackColor = true;
             button2.Visible = false;
+            button2.Click += button2_Click;
             // 
             // label1
             // 
@@ -89,6 +93,7 @@
             label1.Size = new Size(107, 20);
             label1.TabIndex = 4;
             label1.Text = "suma gracza 1:";
+            label1.Visible = false;
             // 
             // label2
             // 
@@ -98,6 +103,7 @@
             label2.Size = new Size(107, 20);
             label2.TabIndex = 5;
             label2.Text = "suma gracza 2:";
+            label2.Visible = false;
             // 
             // label3
             // 
@@ -107,6 +113,7 @@
             label3.Size = new Size(17, 20);
             label3.TabIndex = 6;
             label3.Text = "0";
+            label3.Visible = false;
             // 
             // label4
             // 
@@ -116,12 +123,46 @@
             label4.Size = new Size(17, 20);
             label4.TabIndex = 7;
             label4.Text = "0";
+            label4.Visible = false;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(270, 24);
+            label5.Name = "label5";
+            label5.Size = new Size(57, 20);
+            label5.TabIndex = 8;
+            label5.Text = "gracz 1";
+            label5.Visible = false;
+            // 
+            // listBox1
+            // 
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 20;
+            listBox1.Location = new Point(63, 54);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(150, 204);
+            listBox1.TabIndex = 9;
+            listBox1.Visible = false;
+            // 
+            // listBox2
+            // 
+            listBox2.FormattingEnabled = true;
+            listBox2.ItemHeight = 20;
+            listBox2.Location = new Point(358, 54);
+            listBox2.Name = "listBox2";
+            listBox2.Size = new Size(150, 204);
+            listBox2.TabIndex = 10;
+            listBox2.Visible = false;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(listBox2);
+            Controls.Add(listBox1);
+            Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -147,5 +188,8 @@
         private Label label2;
         private Label label3;
         private Label label4;
+        private Label label5;
+        private ListBox listBox1;
+        private ListBox listBox2;
     }
 }
