@@ -6,11 +6,11 @@ namespace lab11
     {
         private List<string> talia;
         private Random random;
-        private int sumaGracza1;
-        private int sumaGracza2;
+        private int sumaG1;
+        private int sumaG2;
         private List<string> kartyG1;
         private List<string> kartyG2;
-        private bool czyG1;
+        private bool czyG1 = true;
         public Form1()
         {
             InitializeComponent();
@@ -19,8 +19,8 @@ namespace lab11
             kartyG1 = new List<string>();
             kartyG2 = new List<string>();
             random = new Random();
-            sumaGracza1 = 0;
-            sumaGracza2 = 0;
+            sumaG1 = 0;
+            sumaG2 = 0;
         }
 
         private List<string> GenerujTalie(List<string> karty)
@@ -34,80 +34,81 @@ namespace lab11
                 talia.Add(karta + " ♥");
             }
             return talia;
+
         }
 
-        private void LosujKarteG1()
+        private void LosujG1()
         {
-            int indeks = random.Next(talia.Count);
-            string kartaGracza1 = talia[indeks];
-            talia.RemoveAt(indeks);
+            int i = random.Next(talia.Count);
+            string kartaG1 = talia[i];
+            talia.RemoveAt(i);
 
-            DodajKarteG1(kartaGracza1);
+            DodajG1(kartaG1);
         }
 
-        private void LosujKarteG2()
+        private void LosujG2()
         {
-            int indeks = random.Next(talia.Count);
-            string kartaGracza2 = talia[indeks];
-            talia.RemoveAt(indeks);
+            int i = random.Next(talia.Count);
+            string kartaG2 = talia[i];
+            talia.RemoveAt(i);
 
-            DodajKarteG2(kartaGracza2);
+            DodajG2(kartaG2);
         }
 
-        private void DodajKarteG1(string karta)
+        private void DodajG1(string karta)
         {
             kartyG1.Add(karta);
             listBox1.Items.Add(karta);
-            AktualizujSumęPunktówG1();
+            AktualizujG1();
         }
 
-        private void DodajKarteG2(string karta)
+        private void DodajG2(string karta)
         {
             kartyG2.Add(karta);
             listBox2.Items.Add(karta);
-            AktualizujSumęPunktówG2();
+            AktualizujG2();
         }
 
-        private void AktualizujSumęPunktówG1()
+        private void AktualizujG1()
         {
-            int suma = ObliczSumęPunktów(kartyG1);
+            int suma = ObliczSume(kartyG1);
             label3.Text = suma.ToString();
         }
 
-        private void AktualizujSumęPunktówG2()
+        private void AktualizujG2()
         {
-            int suma = ObliczSumęPunktów(kartyG2);
+            int suma = ObliczSume(kartyG2);
             label4.Text = suma.ToString();
         }
 
-        private int ObliczSumęPunktów(List<string> karty)
+        private int ObliczSume(List<string> karty)
         {
             int suma = 0;
-            int liczbaAsów = 0;
+            int liczbaAs = 0;
 
             foreach (string karta in karty)
             {
-                string wartośćKarty = karta.Substring(0, karta.Length - 2);
+                string wartosc = karta.Substring(0, karta.Length - 2);
 
-                if (wartośćKarty == "A")
+                if (wartosc == "A")
                 {
                     suma += 11;
-                    liczbaAsów++;
+                    liczbaAs++;
                 }
-                else if (wartośćKarty == "K" || wartośćKarty == "Q" || wartośćKarty == "J")
+                else if (wartosc == "K" || wartosc == "Q" || wartosc == "J")
                 {
                     suma += 10;
                 }
                 else
                 {
-                    suma += int.Parse(wartośćKarty);
+                    suma += int.Parse(wartosc);
                 }
             }
 
-            while (suma > 21 && liczbaAsów > 0)
+            while (suma > 21 && liczbaAs > 0)
             {
                 suma -= 10;
-                liczbaAsów--;
+                liczbaAs--;
             }
 
             return suma;
@@ -115,25 +116,15 @@ namespace lab11
 
         private void SprawdzWynik()
         {
-            int sumaGracza1 = ObliczSumęPunktów(kartyG1);
-            int sumaGracza2 = ObliczSumęPunktów(kartyG2);
+            int sumaG1 = ObliczSume(kartyG1);
+            int sumaG2 = ObliczSume(kartyG2);
 
-            if (sumaGracza1 >= 22)
-            {
-                MessageBox.Show("Gracz 2 przegrał!");
-                Koniec();
-            }
-            else if (sumaGracza2 >= 22)
-            {
-                MessageBox.Show("Gracz 1 przegrał!");
-                Koniec();
-            }
-            else if (sumaGracza1 == 21)
+            if (sumaG2 >= 22 || sumaG1 == 21)
             {
                 MessageBox.Show("Gracz 1 wygrywa!");
                 Koniec();
             }
-            else if (sumaGracza2 == 21)
+            else if (sumaG1 >= 22 || sumaG2 == 21)
             {
                 MessageBox.Show("Gracz 2 wygrywa!");
                 Koniec();
@@ -142,8 +133,13 @@ namespace lab11
 
         private void Koniec()
         {
-            button1.Enabled = false;
-            button2.Enabled = false;
+            listBox1.Items.Clear();
+            listBox2.Items.Clear();
+            kartyG1.Clear();
+            kartyG2.Clear();
+            label3.Text = "0";
+            label4.Text = "0";
+            czyG1 = true;
         }
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
@@ -153,7 +149,7 @@ namespace lab11
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            if (!czyG1)
+            if (czyG1)
             {
                 label5.Text = "Gracz 1";
             }
@@ -181,24 +177,52 @@ namespace lab11
 
         private void button1_Click(object sender, EventArgs e)
         {
-                LosujKarteG1();
+            if (czyG1)
+            {
+                LosujG1();
                 SprawdzWynik();
 
-                if (ObliczSumęPunktów(kartyG1) < 21)
+                if (ObliczSume(kartyG1) < 21)
                 {
                     return;
                 }
+                else if (ObliczSume(kartyG1) >= 21)
+                {
+                    czyG1 = false;
+                    label5.Text = "Gracz 2";
+                }
+            }
+            else
+            {
+                LosujG2();
+                SprawdzWynik();
 
-            czyG1 = true;
-            
-            SprawdzWynik();
+                if (ObliczSume(kartyG2) < 21)
+                {
+                    return;
+                }
+                else if (ObliczSume(kartyG2) >= 21)
+                {
+                    label5.Text = "Gracz 1";
+                    czyG1 = true;
+                }
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (czyG1)
+            {
                 czyG1 = false;
-                LosujKarteG2();
+                label5.Text = "Gracz 2";
                 SprawdzWynik();
+            }
+            else
+            {
+                czyG1 = true;
+                label5.Text = "Gracz 1";
+                SprawdzWynik();
+            }
         }
     }
 }
