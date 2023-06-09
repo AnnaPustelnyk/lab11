@@ -39,6 +39,8 @@
             label5 = new Label();
             listBox1 = new ListBox();
             listBox2 = new ListBox();
+            label6 = new Label();
+            label7 = new Label();
             SuspendLayout();
             // 
             // radioButton1
@@ -155,11 +157,33 @@
             listBox2.TabIndex = 10;
             listBox2.Visible = false;
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(63, 26);
+            label6.Name = "label6";
+            label6.Size = new Size(57, 20);
+            label6.TabIndex = 11;
+            label6.Text = "gracz 1";
+            label6.Visible = false;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(358, 24);
+            label7.Name = "label7";
+            label7.Size = new Size(57, 20);
+            label7.TabIndex = 12;
+            label7.Text = "gracz 2";
+            label7.Visible = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label7);
+            Controls.Add(label6);
             Controls.Add(listBox2);
             Controls.Add(listBox1);
             Controls.Add(label5);
@@ -191,5 +215,7 @@
         private Label label5;
         private ListBox listBox1;
         private ListBox listBox2;
+        private Label label6;
+        private Label label7;
     }
 }

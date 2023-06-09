@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace lab11
 {
     public partial class Form1 : Form
     {
-        private List<string> talia;
+        private List<string> list, talia;
         private Random random;
         private int sumaG1;
         private int sumaG2;
@@ -14,8 +15,7 @@ namespace lab11
         public Form1()
         {
             InitializeComponent();
-            talia = new List<string>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
-            talia = GenerujTalie(talia);
+            list = new List<string>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
             kartyG1 = new List<string>();
             kartyG2 = new List<string>();
             random = new Random();
@@ -41,18 +41,34 @@ namespace lab11
         {
             int i = random.Next(talia.Count);
             string kartaG1 = talia[i];
-            talia.RemoveAt(i);
+            if (radioButton2.Checked)
+            {
+                talia.RemoveAt(i);
 
-            DodajG1(kartaG1);
+                DodajG1(kartaG1);
+            }
+            else
+            {
+                kartyG1.Add(kartaG1);
+                AktualizujG1();
+            }
         }
 
         private void LosujG2()
         {
             int i = random.Next(talia.Count);
             string kartaG2 = talia[i];
-            talia.RemoveAt(i);
+            if (radioButton2.Checked)
+            {
+                talia.RemoveAt(i);
 
-            DodajG2(kartaG2);
+                DodajG2(kartaG2);
+            }
+            else
+            {
+                kartyG2.Add(kartaG2);
+                AktualizujG2();
+            }
         }
 
         private void DodajG1(string karta)
@@ -71,14 +87,30 @@ namespace lab11
 
         private void AktualizujG1()
         {
-            int suma = ObliczSume(kartyG1);
-            label3.Text = suma.ToString();
+            if (radioButton2.Checked)
+            {
+                int suma = ObliczSume(kartyG1);
+                label3.Text = suma.ToString();
+            }
+            else
+            {
+                int suma = kartyG1.Count;
+                label3.Text = suma.ToString();
+            }
         }
 
         private void AktualizujG2()
         {
-            int suma = ObliczSume(kartyG2);
-            label4.Text = suma.ToString();
+            if (radioButton2.Checked)
+            {
+                int suma = ObliczSume(kartyG2);
+                label4.Text = suma.ToString();
+            }
+            else
+            {
+                int suma = kartyG2.Count;
+                label4.Text = suma.ToString();
+            }
         }
 
         private int ObliczSume(List<string> karty)
@@ -116,18 +148,32 @@ namespace lab11
 
         private void SprawdzWynik()
         {
-            int sumaG1 = ObliczSume(kartyG1);
-            int sumaG2 = ObliczSume(kartyG2);
+            if (radioButton2.Checked)
+            {
+                int sumaG1 = ObliczSume(kartyG1);
+                int sumaG2 = ObliczSume(kartyG2);
 
-            if (sumaG2 >= 22 || sumaG1 == 21)
-            {
-                MessageBox.Show("Gracz 1 wygrywa!");
-                Koniec();
+                if (sumaG2 >= 22 || sumaG1 == 21)
+                {
+                    MessageBox.Show("Gracz 1 wygrywa!");
+                    Koniec();
+                }
+                else if (sumaG1 >= 22 || sumaG2 == 21)
+                {
+                    MessageBox.Show("Gracz 2 wygrywa!");
+                    Koniec();
+                }
             }
-            else if (sumaG1 >= 22 || sumaG2 == 21)
+            else if (radioButton1.Checked)
             {
-                MessageBox.Show("Gracz 2 wygrywa!");
-                Koniec();
+                if (kartyG1.Count == 0)
+                {
+                    MessageBox.Show("Gracz 2 wygrał");
+                }
+                else if (kartyG2.Count == 0)
+                {
+                    MessageBox.Show("Gracz 1 wygrał");
+                }
             }
         }
 
@@ -143,26 +189,59 @@ namespace lab11
         }
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            listBox1.Items.Clear();
-            listBox2.Items.Clear();
+            if (radioButton1.Checked)
+            {
+                talia = GenerujTalie(list);
+                listBox1.Items.Clear();
+                listBox2.Items.Clear();
+                kartyG1.Clear();
+                kartyG2.Clear();
+
+                label3.Text = "0";
+                label4.Text = "0";
+
+                button1.Visible = true;
+                button2.Visible = false;
+                label1.Visible = true;
+                label2.Visible = true;
+                label3.Visible = true;
+                label4.Visible = true;
+                label5.Visible = false;
+                label6.Visible = true;
+                label7.Visible = true;
+                listBox1.Visible = true;
+                listBox2.Visible = true;
+
+                int liczbaKartNaGracza = talia.Count / 2;
+
+                for (int i = 0; i < liczbaKartNaGracza; i++)
+                {
+                    LosujG1();
+                    LosujG2();
+                }
+
+                AktualizujG1();
+                AktualizujG2();
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            if (czyG1)
-            {
-                label5.Text = "Gracz 1";
-            }
-            else
-            {
-                label5.Text = "Gracz 2";
-            }
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton2.Checked)
             {
+                talia = GenerujTalie(list);
+                listBox1.Items.Clear();
+                listBox2.Items.Clear();
+                kartyG1.Clear();
+                kartyG2.Clear();
+
+                label3.Text = "0";
+                label4.Text = "0";
+
                 button1.Visible = true;
                 button2.Visible = true;
                 label1.Visible = true;
@@ -170,6 +249,8 @@ namespace lab11
                 label3.Visible = true;
                 label4.Visible = true;
                 label5.Visible = true;
+                label6.Visible = false;
+                label7.Visible = false;
                 listBox1.Visible = true;
                 listBox2.Visible = true;
             }
