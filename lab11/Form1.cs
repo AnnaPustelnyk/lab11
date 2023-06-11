@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using System.Collections.Generic;
 
 namespace lab11
@@ -258,35 +259,129 @@ namespace lab11
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (czyG1)
+            if (radioButton2.Checked)
             {
-                LosujG1();
-                SprawdzWynik();
+                if (czyG1)
+                {
+                    LosujG1();
+                    SprawdzWynik();
 
-                if (ObliczSume(kartyG1) < 21)
-                {
-                    return;
+                    if (ObliczSume(kartyG1) < 21)
+                    {
+                        return;
+                    }
+                    else if (ObliczSume(kartyG1) >= 21)
+                    {
+                        czyG1 = false;
+                        label5.Text = "Gracz 2";
+                    }
                 }
-                else if (ObliczSume(kartyG1) >= 21)
+                else
                 {
-                    czyG1 = false;
-                    label5.Text = "Gracz 2";
+                    LosujG2();
+                    SprawdzWynik();
+
+                    if (ObliczSume(kartyG2) < 21)
+                    {
+                        return;
+                    }
+                    else if (ObliczSume(kartyG2) >= 21)
+                    {
+                        label5.Text = "Gracz 1";
+                        czyG1 = true;
+                    }
                 }
             }
             else
             {
-                LosujG2();
+                PorownajKarty();
                 SprawdzWynik();
+            }
+        }
 
-                if (ObliczSume(kartyG2) < 21)
+        string secCardG1 = null, secCardG2 = null;
+        private void PorownajKarty()
+        {
+            string lastCardG1 = null, lastCardG2 = null;
+            if (kartyG1.Count > 0)
+            {
+                lastCardG1 = kartyG1[kartyG1.Count - 1];
+                kartyG1.RemoveAt(kartyG1.Count - 1);
+                listBox1.Items.Add(lastCardG1);
+            }
+
+            if (kartyG2.Count > 0)
+            {
+                lastCardG2 = kartyG2[kartyG2.Count - 1];
+                kartyG2.RemoveAt(kartyG2.Count - 1);
+                listBox2.Items.Add(lastCardG2);
+            }
+
+            int lastCardG1Value = ObliczWartoscKarty(lastCardG1);
+            int lastCardG2Value = ObliczWartoscKarty(lastCardG2);
+
+            if (lastCardG1Value > lastCardG2Value)
+            {
+                kartyG1.Insert(0, lastCardG1);
+                kartyG1.Insert(0, lastCardG2);
+                if (secCardG1 != null && secCardG2 != null)
                 {
-                    return;
+                    kartyG1.Insert(0, secCardG1);
+                    kartyG1.Insert(0, secCardG2);
                 }
-                else if (ObliczSume(kartyG2) >= 21)
+                label3.Text = kartyG1.Count.ToString();
+                label4.Text = kartyG2.Count.ToString();
+            }
+            else if (lastCardG2Value > lastCardG1Value)
+            {
+                kartyG2.Insert(0, lastCardG2);
+                kartyG2.Insert(0, lastCardG1);
+                if (secCardG1 != null && secCardG2 != null)
                 {
-                    label5.Text = "Gracz 1";
-                    czyG1 = true;
+                    kartyG1.Insert(0, secCardG1);
+                    kartyG1.Insert(0, secCardG2);
                 }
+                label3.Text = kartyG1.Count.ToString();
+                label4.Text = kartyG2.Count.ToString();
+            }
+            else if (lastCardG1Value == lastCardG2Value)
+            {
+                MessageBox.Show("Wojna!");
+
+
+                if (kartyG1.Count > 0)
+                {
+                    secCardG1 = kartyG1[kartyG1.Count - 1];
+                    kartyG1.RemoveAt(kartyG1.Count - 1);
+                }
+
+                if (kartyG2.Count > 0)
+                {
+                    secCardG2 = kartyG2[kartyG2.Count - 1];
+                    kartyG2.RemoveAt(kartyG2.Count - 1);
+                }
+
+                listBox1.Items.Add("■");
+                listBox2.Items.Add("■");
+
+                PorownajKarty();
+            }
+        }
+        private int ObliczWartoscKarty(string karta)
+        {
+            string wartosc = karta.Substring(0, karta.Length - 2);
+
+            if (wartosc == "A")
+            {
+                return 11;
+            }
+            else if (wartosc == "K" || wartosc == "Q" || wartosc == "J")
+            {
+                return 10;
+            }
+            else
+            {
+                return int.Parse(wartosc);
             }
         }
 
@@ -304,6 +399,11 @@ namespace lab11
                 label5.Text = "Gracz 1";
                 SprawdzWynik();
             }
+        }
+
+        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
